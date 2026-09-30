@@ -1,0 +1,54 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/session/create"
+  to = "/.netlify/functions/session?action=create"
+  status = 200
+
+[[redirects]]
+  from = "/api/session/:code/revoke"
+  to = "/.netlify/functions/session?action=revoke&code=:code"
+  status = 200
+
+[[redirects]]
+  from = "/api/session/:code/expire"
+  to = "/.netlify/functions/session?action=expire&code=:code"
+  status = 200
+
+[[redirects]]
+  from = "/api/session/:code/records"
+  to = "/.netlify/functions/session?action=records&code=:code"
+  status = 200
+
+[[redirects]]
+  from = "/api/session/:code/report/:id"
+  to = "/.netlify/functions/session?action=report&code=:code&id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/api/session/:code/document/:id"
+  to = "/.netlify/functions/session?action=document&code=:code&id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/api/session/:code/insights"
+  to = "/.netlify/functions/session?action=insights&code=:code"
+  status = 200
+
+[[redirects]]
+  from = "/api/session/:code/audit"
+  to = "/.netlify/functions/session?action=audit&code=:code"
+  status = 200
+
+[[redirects]]
+  from = "/api/session/:code"
+  to = "/.netlify/functions/session?action=get&code=:code"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

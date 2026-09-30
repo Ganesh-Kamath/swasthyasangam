@@ -1,0 +1,11 @@
+/api/session/create /.netlify/functions/session?action=create 200
+/api/session/:code/revoke /.netlify/functions/session?action=revoke&code=:code 200
+/api/session/:code/expire /.netlify/functions/session?action=expire&code=:code 200
+/api/session/:code/records /.netlify/functions/session?action=records&code=:code 200
+/api/session/:code/report/:id /.netlify/functions/session?action=report&code=:code&id=:id 200
+/api/session/:code/document/:id /.netlify/functions/session?action=document&code=:code&id=:id 200
+/api/session/:code/insights /.netlify/functions/session?action=insights&code=:code 200
+/api/session/:code/audit /.netlify/functions/session?action=audit&code=:code 200
+/api/session/:code /.netlify/functions/session?action=get&code=:code 200
+/* /index.html 200
+
