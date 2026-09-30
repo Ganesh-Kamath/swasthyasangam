@@ -12,12 +12,19 @@ import {
   Lock
 } from 'lucide-react';
 
+export interface InsightSource {
+  text: string;
+  sourceRecordId: string;
+  sourceLabel: string;
+  sourceDate: string;
+}
+
 export interface AiInsight {
   type: string;
   title: string;
   summary: string;
   severity: 'routine' | 'moderate' | 'elevated';
-  sources: string[];
+  sources: InsightSource[];
 }
 
 interface SmartInsightsProps {
@@ -182,8 +189,8 @@ const InsightCard: React.FC<{
                     key={sIdx}
                     type="button"
                     data-testid={`evidence-chip-${index}-${sIdx}`}
-                    onClick={() => onClickSource?.(src)}
-                    title={onClickSource ? `View source record: ${src}` : src}
+                    onClick={() => onClickSource?.(src.sourceRecordId)}
+                    title={onClickSource ? `View source record: ${src.sourceLabel}` : src.sourceLabel}
                     style={{
                       fontSize: '11px',
                       fontWeight: 600,
@@ -208,7 +215,7 @@ const InsightCard: React.FC<{
                     }}
                   >
                     <FileText size={10} />
-                    {src}
+                    {src.sourceLabel}
                   </button>
                 ))}
               </div>

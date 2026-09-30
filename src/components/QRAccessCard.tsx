@@ -122,7 +122,7 @@ export const QRAccessCard: React.FC<QRAccessCardProps> = ({
         <div className="qr-mechanism-note" data-testid="qr-security-note">
           <Lock size={14} color="var(--cyan-dark)" style={{ flexShrink: 0, marginTop: '2px' }} />
           <span>
-            <strong>Zero Health Data in QR.</strong> Your records remain in your account. Only this consultation access expires.
+            <strong>Zero Health Data in QR.</strong> The QR code contains a temporary session identifier, not medical records. Your records remain in your account. Only this consultation access expires.
           </span>
         </div>
 

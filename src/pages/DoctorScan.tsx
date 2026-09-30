@@ -74,7 +74,7 @@ export const DoctorScan: React.FC<DoctorScanProps> = ({
           Validating temporary consent token for session <strong>{sessionCodeInput}</strong>...
         </p>
         <div style={{ marginTop: '20px', fontSize: '12px', color: 'var(--text-muted)' }}>
-          Cryptographic token validation in progress
+          Session token validation in progress
         </div>
       </div>
     );

@@ -7,7 +7,7 @@
 
 ## 🎯 Demo Purpose & Core Architecture
 
-This prototype demonstrates how **SwasthyaSangam** enables secure, temporary medical record sharing with zero privacy leakage:
+This prototype demonstrates how **SwasthyaSangam** enables secure, temporary medical record sharing designed to minimize unnecessary exposure:
 1. **Selective Sharing**: The patient selects only the records pertinent to the current consultation (e.g. ECG, Lipid Profile, Echocardiogram), withholding unrelated history (e.g. past prescriptions).
 2. **Session-Only Optical QR**: The QR code encodes a temporary authorization session (`SS-DEMO-4821`), **never raw health records**.
 3. **Time-Bound Verification**: Real-time countdown enforces strict session validity (`expiresAt - Date.now()`).
@@ -45,11 +45,11 @@ Follow this sequence when presenting to judges:
 | **00:00** | Start on Landing page, click **"Start Demo"** | *"Patients often carry voluminous paper files or share entire digital profiles with a doctor. SwasthyaSangam gives patients strict selective control over their evidence."* |
 | **00:10** | Show Rahul Mehta's 4 clinical records. Notice 3 are selected (ECG, Lipid Profile, 2D Echo) while Cardiology Prescription is unselected. | *"Instead of giving the doctor everything, Rahul Mehta chooses only the 3 relevant diagnostic reports, withholding the prescription."* |
 | **00:20** | Click **"Create Temporary Access"**. Review target doctor (**Dr. Ananya Shah**, Cardiology) and 30m duration. Click **"Generate QR Access"**. | *"He sets a 30-minute access window strictly for Dr. Shah's consultation."* |
-| **00:30** | QR Access screen appears with Session ID `SS-DEMO-4821` and live countdown timer. | *"Crucially, this QR code does NOT contain medical data. It represents an ephemeral, cryptographically bounded session token."* |
+| **00:30** | QR Access screen appears with Session ID `SS-DEMO-4821` and live countdown timer. | *"Crucially, this QR code does NOT contain medical data. It represents a temporary session identifier."* |
 | **00:40** | Click **"Simulate Doctor Scan"**. Watch the 1-second `VERIFYING ACCESS` → `ACCESS GRANTED` transition. | *"When Dr. Shah scans the QR code at the clinic, the system validates the session token and pulls only permitted records."* |
 | **00:50** | Doctor view shows only the 3 selected records. Click **"View Report"** on ECG or Lipid Profile. | *"Notice the prescription is absent because Rahul withheld it. The document viewer preserves source facility, document date, and clinical parameters."* |
 | **01:05** | Point out the countdown timer, then click **"Revoke Access"** (or **"Simulate Expiry"**). | *"The access is temporary. If Rahul revokes access—or when the timer hits zero—access is terminated immediately."* |
-| **01:15** | Doctor view updates to **`ACCESS REVOKED`** and all clinical records disappear. | *"The session is closed and zero data remains cached on the physician's client."* |
+| **01:15** | Doctor view updates to **`ACCESS REVOKED`** and all clinical records disappear. | *"The session is closed and access is revoked after expiry or patient revocation."* |
 
 ---
 
