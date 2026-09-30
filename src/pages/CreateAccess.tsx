@@ -16,7 +16,7 @@ export const CreateAccess: React.FC<CreateAccessProps> = ({
   onGenerateQR
 }) => {
   const [durationMinutes, setDurationMinutes] = useState<number>(30);
-  const [purpose, setPurpose] = useState<string>('Cardiology consultation');
+  const [purpose, setPurpose] = useState<string>('Remote Cardiology Consultation');
 
   const durationOptions = [
     { value: 15, label: '15 min' },
@@ -43,7 +43,15 @@ export const CreateAccess: React.FC<CreateAccessProps> = ({
 
         {/* Focused Context Statement */}
         <div className="access-context-statement">
-          You're sharing <strong>{selectedRecords.length} records</strong> with <strong>{doctor.name}</strong> for a {purpose.toLowerCase()}.
+          You're sharing <strong>{selectedRecords.length} records</strong> with <strong>{doctor.name}</strong> for a <strong>Remote Cardiology Consultation</strong>.
+        </div>
+
+        {/* Consultation Purpose Section */}
+        <div className="form-section-block" style={{ marginBottom: '14px' }}>
+          <div className="section-micro-label">Consultation Purpose</div>
+          <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--primary)', marginTop: '3px' }}>
+            Remote Cardiology Consultation
+          </div>
         </div>
 
         {/* Doctor Summary & Scope */}

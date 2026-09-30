@@ -5,12 +5,13 @@ import {
   ChevronDown,
   ChevronUp,
   FileText,
-  AlertTriangle,
   CheckCircle,
   TrendingUp,
   Shield,
-  Lock
+  Lock,
+  AlertCircle
 } from 'lucide-react';
+import { InsightCategory } from '../data/clinicalCatalog';
 
 export interface InsightSource {
   text: string;
@@ -23,53 +24,72 @@ export interface AiInsight {
   type: string;
   title: string;
   summary: string;
-  severity: 'routine' | 'moderate' | 'elevated';
+  category: InsightCategory;
+  severity?: 'routine' | 'moderate' | 'elevated';
   sources: InsightSource[];
 }
 
 interface SmartInsightsProps {
   sessionId: string;
+  sharedRecords?: Array<{ id: string; title: string }>;
   onExpire?: () => void;
   onClickSource?: (source: string) => void;
 }
 
-function getSeverityMeta(severity: string) {
-  switch (severity) {
-    case 'elevated':
+function getCategoryMeta(category: string) {
+  switch (category) {
+    case 'LONGITUDINAL INFORMATION':
       return {
-        label: 'Elevated',
-        color: '#B91C1C',
-        bg: '#FEF2F2',
-        border: '#FECACA',
-        icon: <AlertTriangle size={12} />
-      };
-    case 'moderate':
-      return {
-        label: 'Moderate',
-        color: '#B45309',
-        bg: '#FFFBEB',
-        border: '#FDE68A',
+        label: 'LONGITUDINAL INFORMATION',
+        color: '#4F46E5', // Indigo
+        bg: '#EEF2FF',
+        border: '#C7D2FE',
         icon: <TrendingUp size={12} />
       };
+    case 'RECORDED OBSERVATION':
+      return {
+        label: 'RECORDED OBSERVATION',
+        color: '#0D9488', // Teal
+        bg: '#F0FDFA',
+        border: '#99F6E4',
+        icon: <CheckCircle size={12} />
+      };
+    case 'RECORD RELATIONSHIP':
+      return {
+        label: 'RECORD RELATIONSHIP',
+        color: '#B45309', // Amber
+        bg: '#FFFBEB',
+        border: '#FDE68A',
+        icon: <FileText size={12} />
+      };
+    case 'SOURCE RECORD':
+      return {
+        label: 'SOURCE RECORD',
+        color: '#475569', // Slate
+        bg: '#F8FAFC',
+        border: '#E2E8F0',
+        icon: <FileText size={12} />
+      };
+    case 'DOCUMENTED VALUE':
     default:
       return {
-        label: 'Routine',
-        color: '#15803D',
-        bg: '#F0FDF4',
-        border: '#BBF7D0',
+        label: 'DOCUMENTED VALUE',
+        color: '#0284C7', // Sky / Cyan
+        bg: '#F0F9FF',
+        border: '#BAE6FD',
         icon: <CheckCircle size={12} />
       };
   }
 }
 
 function getTypeIcon(type: string): React.ReactNode {
-  if (type.includes('lipid') || type.includes('glycemic') || type.includes('glucose') || type.includes('hyperglycemia')) {
+  if (type.includes('lipid') || type.includes('glycemic') || type.includes('glucose') || type.includes('hba1c')) {
     return <TrendingUp size={14} />;
   }
-  if (type.includes('rhythm') || type.includes('cardiac') || type.includes('structural') || type.includes('vascular')) {
+  if (type.includes('rhythm') || type.includes('cardiac') || type.includes('structural') || type.includes('echo') || type.includes('bp') || type.includes('troponin')) {
     return <CheckCircle size={14} />;
   }
-  if (type.includes('hematology') || type.includes('hepatorenal')) {
+  if (type.includes('cbc') || type.includes('hematology') || type.includes('hepatorenal') || type.includes('lft')) {
     return <Shield size={14} />;
   }
   return <FileText size={14} />;
@@ -81,14 +101,14 @@ const InsightCard: React.FC<{
   onClickSource?: (source: string) => void;
 }> = ({ insight, index, onClickSource }) => {
   const [expanded, setExpanded] = useState(index === 0);
-  const sev = getSeverityMeta(insight.severity);
+  const cat = getCategoryMeta(insight.category || 'DOCUMENTED VALUE');
 
   return (
     <div
       data-testid={`ai-insight-item-${index}`}
       style={{
-        border: `1px solid ${sev.border}`,
-        borderLeft: `4px solid ${sev.color}`,
+        border: `1px solid ${cat.border}`,
+        borderLeft: `4px solid ${cat.color}`,
         borderRadius: '8px',
         overflow: 'hidden',
         background: '#FFFFFF'
@@ -100,9 +120,9 @@ const InsightCard: React.FC<{
         onClick={() => setExpanded((v) => !v)}
         style={{
           width: '100%',
-          background: sev.bg,
+          background: cat.bg,
           border: 'none',
-          borderBottom: expanded ? `1px solid ${sev.border}` : 'none',
+          borderBottom: expanded ? `1px solid ${cat.border}` : 'none',
           padding: '10px 14px',
           display: 'flex',
           alignItems: 'center',
@@ -113,7 +133,7 @@ const InsightCard: React.FC<{
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
-          <span style={{ color: sev.color, flexShrink: 0 }}>
+          <span style={{ color: cat.color, flexShrink: 0 }}>
             {getTypeIcon(insight.type)}
           </span>
           <span
@@ -134,20 +154,20 @@ const InsightCard: React.FC<{
             style={{
               fontSize: '10px',
               fontWeight: 700,
-              color: sev.color,
-              background: `${sev.color}18`,
-              border: `1px solid ${sev.color}44`,
+              color: cat.color,
+              background: `${cat.color}14`,
+              border: `1px solid ${cat.color}33`,
               padding: '2px 7px',
               borderRadius: '4px',
               textTransform: 'uppercase',
-              letterSpacing: '0.05em',
+              letterSpacing: '0.04em',
               display: 'flex',
               alignItems: 'center',
               gap: '3px'
             }}
           >
-            {sev.icon}
-            {sev.label}
+            {cat.icon}
+            {cat.label}
           </span>
           {expanded ? (
             <ChevronUp size={14} color="var(--text-muted)" />
@@ -168,20 +188,19 @@ const InsightCard: React.FC<{
           {insight.sources && insight.sources.length > 0 && (
             <div
               data-testid={`ai-insight-sources-${index}`}
-              style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', flexWrap: 'wrap' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}
             >
               <span
                 style={{
-                  fontSize: '10px',
+                  fontSize: '11px',
                   fontWeight: 700,
                   color: 'var(--text-muted)',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  paddingTop: '3px',
+                  letterSpacing: '0.04em',
                   whiteSpace: 'nowrap'
                 }}
               >
-                Evidence:
+                Source:
               </span>
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 {insight.sources.map((src, sIdx) => (
@@ -190,7 +209,7 @@ const InsightCard: React.FC<{
                     type="button"
                     data-testid={`evidence-chip-${index}-${sIdx}`}
                     onClick={() => onClickSource?.(src.sourceRecordId)}
-                    title={onClickSource ? `View source record: ${src.sourceLabel}` : src.sourceLabel}
+                    title={onClickSource ? `Open original document: ${src.sourceLabel}` : src.sourceLabel}
                     style={{
                       fontSize: '11px',
                       fontWeight: 600,
@@ -215,7 +234,9 @@ const InsightCard: React.FC<{
                     }}
                   >
                     <FileText size={10} />
-                    {src.sourceLabel}
+                    <span>
+                      {src.sourceLabel}{src.sourceDate ? ` • ${src.sourceDate}` : ''} →
+                    </span>
                   </button>
                 ))}
               </div>
@@ -229,6 +250,7 @@ const InsightCard: React.FC<{
 
 export const SmartInsights: React.FC<SmartInsightsProps> = ({
   sessionId,
+  sharedRecords,
   onExpire,
   onClickSource
 }) => {
@@ -265,10 +287,19 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
     fetchInsights();
   }, [fetchInsights]);
 
-  const severityOrder = { elevated: 0, moderate: 1, routine: 2 };
-  const sortedInsights = [...insights].sort(
-    (a, b) => (severityOrder[a.severity] ?? 3) - (severityOrder[b.severity] ?? 3)
+  // Derived scope presentation
+  const displayRecordCount = sharedRecords?.length ?? (
+    insights.reduce((acc, curr) => {
+      curr.sources.forEach(s => acc.add(s.sourceRecordId));
+      return acc;
+    }, new Set<string>()).size || 3
   );
+
+  const displayRecordNames = sharedRecords && sharedRecords.length > 0
+    ? sharedRecords.map(r => r.title.replace(/Report/i, '').split('(')[0].trim()).join(' • ')
+    : Array.from(
+        new Set(insights.flatMap(ins => ins.sources.map(s => s.sourceLabel.replace(/Report/i, '').split('(')[0].trim())))
+      ).join(' • ');
 
   return (
     <div
@@ -293,16 +324,24 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
           borderLeft: '4px solid var(--cyan)'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Sparkles size={16} color="var(--cyan)" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Sparkles size={20} color="var(--cyan)" />
           <div>
-            <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-              AI Clinical Insights
+            <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--cyan-dark)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              SMART INSIGHTS
             </div>
-            <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '1px' }}>
-              Structured summary of documented findings — not a diagnosis
+            <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
+              Based on {displayRecordCount} shared record{displayRecordCount !== 1 ? 's' : ''}
             </div>
+            {displayRecordNames && (
+              <div style={{ fontSize: '11.5px', color: 'var(--text-secondary)', fontWeight: 500, marginTop: '2px' }}>
+                {displayRecordNames}
+              </div>
+            )}
           </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span
             style={{
               fontSize: '10px',
@@ -310,7 +349,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
               background: '#ECFEFF',
               color: '#0E7490',
               border: '1px solid #A5F3FC',
-              padding: '2px 7px',
+              padding: '3px 8px',
               borderRadius: '4px',
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
@@ -322,40 +361,38 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
             <Lock size={9} />
             Protected Endpoint
           </span>
-        </div>
 
-        <button
-          type="button"
-          className="btn btn-secondary btn-sm"
-          data-testid="refresh-insights-btn"
-          onClick={fetchInsights}
-          disabled={loading}
-          style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}
-        >
-          <RefreshCw size={11} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} />
-          {loading ? 'Analyzing...' : 'Refresh'}
-        </button>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            data-testid="refresh-insights-btn"
+            onClick={fetchInsights}
+            disabled={loading}
+            style={{ fontSize: '11px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}
+          >
+            <RefreshCw size={11} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} />
+            {loading ? 'Analyzing...' : 'Refresh'}
+          </button>
+        </div>
       </div>
 
-      {/* Disclaimer */}
+      {/* AI Disclaimer */}
       <div
         style={{
           display: 'flex',
-          alignItems: 'flex-start',
+          alignItems: 'center',
           gap: '8px',
           padding: '8px 18px',
-          background: '#FAFAFA',
+          background: '#F8FAFC',
           borderBottom: '1px solid var(--border)',
-          fontSize: '11px',
+          fontSize: '11.5px',
           color: 'var(--text-muted)',
-          lineHeight: 1.5
+          lineHeight: 1.4
         }}
       >
-        <AlertTriangle size={12} style={{ flexShrink: 0, marginTop: '1px', color: '#B45309' }} />
+        <Shield size={13} style={{ flexShrink: 0, color: 'var(--cyan-dark)' }} />
         <span>
-          These insights organize and summarize information <strong>explicitly present</strong> in the
-          patient-authorized records. They do not constitute a diagnosis, treatment recommendation, or
-          clinical decision. All evidence chips are traceable to the source record.
+          AI-assisted organization of information documented in the shared records. It does not diagnose conditions or recommend treatment.
         </span>
       </div>
 
@@ -375,18 +412,18 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
               gap: '8px'
             }}
           >
-            <AlertTriangle size={14} />
+            <AlertCircle size={14} />
             <span>Could not load insights. The session may have expired or is unreachable.</span>
           </div>
         )}
 
-        {!fetchFailed && sortedInsights.length === 0 && !loading && (
+        {!fetchFailed && insights.length === 0 && !loading && (
           <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', textAlign: 'center', padding: '16px 0' }}>
             No clinical insights available for the selected records.
           </div>
         )}
 
-        {sortedInsights.length > 0 && (
+        {insights.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <div
               style={{
@@ -398,9 +435,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
                 gap: '6px'
               }}
             >
-              <span>{sortedInsights.length} finding{sortedInsights.length !== 1 ? 's' : ''} identified</span>
-              <span>·</span>
-              <span>sorted by clinical priority</span>
+              <span>{insights.length} documented observation{insights.length !== 1 ? 's' : ''} organized</span>
               {lastFetched > 0 && (
                 <>
                   <span>·</span>
@@ -409,7 +444,7 @@ export const SmartInsights: React.FC<SmartInsightsProps> = ({
               )}
             </div>
 
-            {sortedInsights.map((ins, i) => (
+            {insights.map((ins, i) => (
               <InsightCard
                 key={`${ins.type}-${i}`}
                 insight={ins}

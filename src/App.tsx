@@ -56,7 +56,7 @@ export const App: React.FC = () => {
 
   // Active Patient for Demo Library
   const [activePatientId, setActivePatientId] = useState<string>('pat-rahul-01');
-  const [consultationPurpose, setConsultationPurpose] = useState<string>('Cardiology consultation');
+  const [consultationPurpose, setConsultationPurpose] = useState<string>('Remote Cardiology Consultation');
   const [showScenarioModal, setShowScenarioModal] = useState<boolean>(false);
 
   // Selected records by patient (persisted in localStorage)
@@ -327,7 +327,7 @@ export const App: React.FC = () => {
       patientName: activePatient.name,
       doctorId: DEMO_DOCTOR.id,
       recordIds: [...selectedRecordIds],
-      purpose: purpose || consultationPurpose || 'Cardiology consultation',
+      purpose: purpose || consultationPurpose || 'Remote Cardiology Consultation',
       durationMinutes,
       createdAt: now,
       expiresAt: now + durationMs,
@@ -405,7 +405,7 @@ export const App: React.FC = () => {
     const { session: freshSession, selectedRecords: freshRecords } = resetDemoState();
     setSession(freshSession);
     setActivePatientId('pat-rahul-01');
-    setConsultationPurpose('Cardiology consultation');
+    setConsultationPurpose('Remote Cardiology Consultation');
     setSelectedRecordIds(freshRecords);
     setViewMode('patient');
     setCurrentStep('select_records');
@@ -618,6 +618,21 @@ export const App: React.FC = () => {
           onClose={() => setShowScenarioModal(false)}
         />
       )}
+
+      {/* Visible Demonstration & Fictional Records Disclaimer */}
+      <footer
+        style={{
+          textAlign: 'center',
+          padding: '14px 20px',
+          fontSize: '11px',
+          color: 'var(--text-muted)',
+          borderTop: '1px solid var(--border)',
+          background: '#FAFAFA'
+        }}
+        data-testid="fictional-demo-disclaimer"
+      >
+        Demo names and records are fictional and used solely for demonstration purposes. Any resemblance to real persons or records is purely coincidental.
+      </footer>
     </div>
   );
 };

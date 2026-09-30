@@ -116,11 +116,13 @@ export const DoctorAccess: React.FC<DoctorAccessProps> = ({
     }
   };
 
-  // Source-record click handler: match evidence chip label to a record title
-  const handleInsightSourceClick = (sourceLabel: string) => {
+  // Source-record click handler: match evidence chip ID or label to an authorized record
+  const handleInsightSourceClick = (sourceIdentifier: string) => {
     const match = sharedRecords.find((r) =>
-      sourceLabel.toLowerCase().includes(r.title.toLowerCase().split('(')[0].trim().toLowerCase()) ||
-      r.title.toLowerCase().includes(sourceLabel.toLowerCase().split('—')[0].trim().toLowerCase())
+      r.id === sourceIdentifier ||
+      sourceIdentifier.toLowerCase().includes(r.id.toLowerCase()) ||
+      sourceIdentifier.toLowerCase().includes(r.title.toLowerCase().split('(')[0].trim().toLowerCase()) ||
+      r.title.toLowerCase().includes(sourceIdentifier.toLowerCase().split('—')[0].trim().toLowerCase())
     );
     if (match) {
       onViewRecord(match);
@@ -161,7 +163,7 @@ export const DoctorAccess: React.FC<DoctorAccessProps> = ({
               <span className="vital-sep">·</span>
               <span data-testid="doctor-patient-blood-group">{patient.bloodGroup}</span>
               <span className="vital-sep">·</span>
-              <span data-testid="doctor-consultation-purpose">{session.purpose || 'Cardiology consultation'}</span>
+              <span data-testid="doctor-consultation-purpose">{session.purpose || 'Remote Cardiology Consultation'}</span>
             </div>
           </div>
 
@@ -196,6 +198,7 @@ export const DoctorAccess: React.FC<DoctorAccessProps> = ({
       {/* AI Smart Clinical Insights — using dedicated SmartInsights component */}
       <SmartInsights
         sessionId={session.sessionId}
+        sharedRecords={sharedRecords}
         onExpire={onExpire}
         onClickSource={handleInsightSourceClick}
       />

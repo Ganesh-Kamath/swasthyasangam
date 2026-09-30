@@ -94,11 +94,13 @@ export const MedicalRecordCard: React.FC<MedicalRecordCardProps> = ({
       <div className="record-card-actions-bar">
         <div className="record-selected-status-label">
           {selected ? (
-            <span className="selected-indicator-text">
-              <span className="selected-dot" /> Selected for sharing
+            <span className="selected-indicator-text" style={{ fontWeight: 700, color: 'var(--emerald)', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+              <span className="selected-dot" /> SELECTED
             </span>
           ) : (
-            <span className="withheld-indicator-text">Not selected (private)</span>
+            <span className="withheld-indicator-text" style={{ fontWeight: 600, color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+              <span>○</span> NOT SHARED
+            </span>
           )}
         </div>
 

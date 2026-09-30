@@ -13,7 +13,7 @@ const defaultSession = {
   patientId: "pat-rahul-01",
   patientName: "Rahul Mehta",
   doctorName: "Dr. Ananya Shah",
-  purpose: "Cardiology consultation",
+  purpose: "Remote Cardiology Consultation",
   selectedRecordIds: ["rec-ecg-01", "rec-lipid-02", "rec-echo-03"],
   durationMinutes: 30,
   createdAt: now,
@@ -254,7 +254,7 @@ export default async function handler(req: Request) {
         : ["rec-ecg-01", "rec-lipid-02", "rec-echo-03"];
 
       const durationMinutes = Number(body.durationMinutes) || 30;
-      const purpose = body.purpose || "Cardiology consultation";
+      const purpose = body.purpose || "Remote Cardiology Consultation";
       const overrideMs = body.overrideMs ? Number(body.overrideMs) : undefined;
       const durationMs = overrideMs || durationMinutes * 60 * 1000;
 
@@ -513,6 +513,9 @@ export default async function handler(req: Request) {
       JSON.stringify({
         sessionCode: session.sessionCode,
         patientId: session.patientId,
+        doctorName: session.doctorName || "Dr. Ananya Shah",
+        purpose: session.purpose || "Remote Cardiology Consultation",
+        selectedRecordIds: session.selectedRecordIds || session.recordIds || [],
         sessionStatus: session.status,
         createdAt: session.createdAt,
         expiresAt: session.expiresAt,

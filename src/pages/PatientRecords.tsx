@@ -314,7 +314,7 @@ export const PatientRecords: React.FC<PatientRecordsProps> = ({
                 outline: 'none'
               }}
             >
-              <option value="Cardiology consultation">Cardiology Consultation</option>
+              <option value="Remote Cardiology Consultation">Remote Cardiology Consultation</option>
               <option value="Review historical cardiac records">Longitudinal Cardiac Review</option>
               <option value="Endocrinology & diabetes review">Diabetes & Metabolic Review</option>
               <option value="General medical consultation">General Medicine Consultation</option>

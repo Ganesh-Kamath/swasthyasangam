@@ -64,7 +64,7 @@ export const QRAccessCard: React.FC<QRAccessCardProps> = ({
         <div className="hero-qr-doctor-meta">
           <span className="hero-qr-doctor-name" data-testid="qr-target-doctor">{doctor.name}</span>
           <span className="hero-qr-meta-dot">•</span>
-          <span className="hero-qr-purpose-text">{doctor.specialization} consultation</span>
+          <span className="hero-qr-purpose-text">{session.purpose || 'Remote Cardiology Consultation'}</span>
         </div>
         <div className="hero-qr-shared-badge-row">
           <span className="meta-records-count-pill" data-testid="qr-shared-count-badge">
@@ -122,7 +122,7 @@ export const QRAccessCard: React.FC<QRAccessCardProps> = ({
         <div className="qr-mechanism-note" data-testid="qr-security-note">
           <Lock size={14} color="var(--cyan-dark)" style={{ flexShrink: 0, marginTop: '2px' }} />
           <span>
-            <strong>Zero Health Data in QR.</strong> The QR code contains a temporary session identifier, not medical records. Your records remain in your account. Only this consultation access expires.
+            <strong>Zero Health Data in QR.</strong> The QR code contains only a temporary session identifier, not medical records. Your records remain in your account. Only this consultation access expires.
           </span>
         </div>
 

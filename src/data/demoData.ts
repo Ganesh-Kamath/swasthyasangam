@@ -870,7 +870,7 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     id: 'scenario-cardio-followup',
     title: 'Cardiology Follow-up',
     patientId: 'pat-rahul-01',
-    purpose: 'Cardiology consultation',
+    purpose: 'Remote Cardiology Consultation',
     description: 'Rahul Mehta (52 Y, B+) with recent ECG, Echocardiogram, and Lipid Profile.',
     recommendedRecordIds: ['rec-ecg-01', 'rec-lipid-02', 'rec-echo-03']
   },

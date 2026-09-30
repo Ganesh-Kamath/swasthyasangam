@@ -14,7 +14,7 @@ const seedDefault = {
   patientName: 'Rahul Mehta',
   doctorId: 'doc-ananya-01',
   doctorName: 'Dr. Ananya Shah',
-  purpose: 'Cardiology consultation',
+  purpose: 'Remote Cardiology Consultation',
   recordIds: ['rec-ecg-01', 'rec-lipid-02', 'rec-echo-03'],
   selectedRecordIds: ['rec-ecg-01', 'rec-lipid-02', 'rec-echo-03'],
   durationMinutes: 30,
@@ -124,7 +124,7 @@ function demoSessionSyncPlugin(): Plugin {
                 patientName: data.patientName || 'Rahul Mehta',
                 doctorId: data.doctorId || 'doc-ananya-01',
                 doctorName: data.doctorName || 'Dr. Ananya Shah',
-                purpose: data.purpose || 'Cardiology consultation',
+                purpose: data.purpose || 'Remote Cardiology Consultation',
                 recordIds: selectedRecordIds,
                 selectedRecordIds,
                 durationMinutes,
@@ -268,7 +268,41 @@ function demoSessionSyncPlugin(): Plugin {
           return;
         }
 
-        // 7. GET /api/session/:code
+        // 7. GET /api/session/:code/audit
+        const auditMatch = pathname.match(/\/api\/session\/([^/?#]+)\/audit/i);
+        if (auditMatch && req.method === 'GET') {
+          const code = decodeURIComponent(auditMatch[1]).trim().toUpperCase();
+          const session = sessionStore[code];
+          if (!session) {
+            res.writeHead(404, securityHeaders);
+            res.end(JSON.stringify({ status: 'not_found', message: 'Session not found' }));
+            return;
+          }
+          const auditLog = session.auditLog || [
+            {
+              event: 'SESSION_CREATED',
+              timestamp: session.createdAt,
+              detail: `Session initialized with ${(session.selectedRecordIds || session.recordIds || []).length} records`,
+              actor: 'patient'
+            }
+          ];
+          res.writeHead(200, securityHeaders);
+          res.end(JSON.stringify({
+            sessionCode: session.sessionCode,
+            patientId: session.patientId,
+            doctorName: session.doctorName || 'Dr. Ananya Shah',
+            purpose: session.purpose || 'Remote Cardiology Consultation',
+            selectedRecordIds: session.selectedRecordIds || session.recordIds || [],
+            sessionStatus: session.status,
+            createdAt: session.createdAt,
+            expiresAt: session.expiresAt,
+            revokedAt: session.revokedAt || null,
+            auditLog
+          }));
+          return;
+        }
+
+        // 8. GET /api/session/:code
         const getMatch = pathname.match(/\/api\/session\/([^/?#]+)/i);
         if (getMatch && req.method === 'GET' && !pathname.includes('/create')) {
           const code = decodeURIComponent(getMatch[1]).trim().toUpperCase();

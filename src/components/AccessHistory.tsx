@@ -24,6 +24,10 @@ interface AuditEvent {
 interface AuditData {
   sessionCode: string;
   patientId: string;
+  doctorName?: string;
+  purpose?: string;
+  recordCount?: number;
+  selectedRecordIds?: string[];
   sessionStatus: string;
   createdAt: number;
   expiresAt: number;
@@ -229,6 +233,72 @@ export const AccessHistory: React.FC<AccessHistoryProps> = ({ sessionId }) => {
         {!error && events.length === 0 && !loading && (
           <div style={{ fontSize: '12.5px', color: 'var(--text-muted)', textAlign: 'center', padding: '20px' }}>
             No access events recorded yet.
+          </div>
+        )}
+
+        {/* Session Consultation Overview */}
+        {data && (
+          <div
+            data-testid="access-history-summary-card"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              gap: '12px',
+              padding: '12px 14px',
+              background: '#F8FAFC',
+              border: '1px solid var(--border)',
+              borderRadius: '8px',
+              marginBottom: '14px'
+            }}
+          >
+            <div>
+              <div style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+                Doctor
+              </div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
+                {data.doctorName || 'Dr. Ananya Shah'}
+              </div>
+            </div>
+
+            <div>
+              <div style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+                Purpose
+              </div>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>
+                {data.purpose || 'Remote Cardiology Consultation'}
+              </div>
+            </div>
+
+            <div>
+              <div style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+                Records Accessed
+              </div>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>
+                {(data.selectedRecordIds?.length || data.recordCount || 3)} shared records
+              </div>
+            </div>
+
+            <div>
+              <div style={{ fontSize: '10px', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.04em' }}>
+                Status
+              </div>
+              <div style={{ marginTop: '2px' }}>
+                <span
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    background: data.sessionStatus === 'active' ? '#DCFCE7' : data.sessionStatus === 'revoked' ? '#FEE2E2' : '#FEF3C7',
+                    color: data.sessionStatus === 'active' ? '#15803D' : data.sessionStatus === 'revoked' ? '#B91C1C' : '#B45309',
+                    border: `1px solid ${data.sessionStatus === 'active' ? '#86EFAC' : data.sessionStatus === 'revoked' ? '#FCA5A5' : '#FDE68A'}`
+                  }}
+                >
+                  {data.sessionStatus === 'active' ? 'Active' : data.sessionStatus === 'revoked' ? 'Revoked' : 'Expired'}
+                </span>
+              </div>
+            </div>
           </div>
         )}
 
