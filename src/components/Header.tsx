@@ -25,14 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Refined Abstract Wordmark & Logo */}
         <div className="logo-block" onClick={() => onNavigate('landing')} title="SwasthyaSangam Home">
           <div className="logo-icon-abstract">
-            {/* Minimal SVG representing connection + record layers + secure lock ring */}
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="4" width="18" height="16" rx="3" />
-              <path d="M7 8h10" />
-              <path d="M7 12h6" />
-              <circle cx="16" cy="14" r="2.5" />
-              <path d="M16 16.5v1.5" />
-            </svg>
+            <img src="/logo.png" alt="SwasthyaSangam Logo" className="logo-img" />
           </div>
           <div>
             <div className="logo-title">SwasthyaSangam</div>

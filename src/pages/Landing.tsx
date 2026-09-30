@@ -9,6 +9,20 @@ export const Landing: React.FC<LandingProps> = ({ onStartDemo }) => {
   return (
     <div className="landing-container" data-testid="landing-view">
       <div className="landing-hero-card">
+        {/* Official SwasthyaSangam Emblem */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+          <img
+            src="/logo.png"
+            alt="SwasthyaSangam Official Emblem"
+            style={{
+              width: '96px',
+              height: '96px',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 10px 24px rgba(18, 168, 232, 0.20))'
+            }}
+          />
+        </div>
+
         {/* Subtle environment pill */}
         <div className="hero-env-badge">
           <span className="hero-env-dot" />
